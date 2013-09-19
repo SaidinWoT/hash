@@ -32,6 +32,8 @@ int main(int argc, char **argv) {
         }
     }
     freeTable(t);
+    free(key);
+    free(val);
     end();
     return 0;
 }

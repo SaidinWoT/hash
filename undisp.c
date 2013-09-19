@@ -51,8 +51,11 @@ void dispval(char *val) {
 }
 
 char in() {
-    char *c = calloc(3, sizeof(char));
+    char *str = calloc(3, sizeof(char));
+    char c;
     printf("(i)nsert, (d)elete, or (g)et? ");
-    fgets(c, 3, stdin);
-    return *c;
+    fgets(str, 3, stdin);
+    c = *str;
+    free(str);
+    return c;
 }

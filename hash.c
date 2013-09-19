@@ -78,6 +78,7 @@ void hset(Table *t, char *k, char *v) {
 void hdel(Table *t, char *k) {
     unsigned int i = _get_index_by_key(t, k);
     Entry *e = t->e[i];
+    Entry *f = t->e[i];
     char *key, *val;
     if(t->e[i] && !strcmp(t->e[i]->key, k)) {
         --t->entries;
@@ -93,6 +94,9 @@ void hdel(Table *t, char *k) {
                 --t->entries;
             }
         }
+        free(f->key);
+        free(f->val);
+        free(f);
     }
 }
 
@@ -102,6 +106,10 @@ Table *makeTable() {
 
 void freeTable(Table *t) {
     while(t->size--) {
+        if(t->e[t->size]) {
+            free(t->e[t->size]->key);
+            free(t->e[t->size]->val);
+        }
         free(t->e[t->size]);
     }
     free(t->e);
