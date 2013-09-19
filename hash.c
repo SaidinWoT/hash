@@ -32,29 +32,22 @@ void hresize(unsigned int size, Table *t) {
 }
 
 unsigned int hash(const char *k) {
-    return *k;
+    unsigned int t = 0x1523;
+    for(; *k; ++k) {
+        t ^= *k;
+        t *= *k;
+        t ^= *k;
+        t += *k;
+    }
+    return t;
 }
-
-/* unsigned int hash(const char *k) { */
-/*     unsigned int t = 0x1523; */
-/*     for(; *k; ++k) { */
-/*         t ^= *k; */
-/*         t *= *k; */
-/*         t ^= *k; */
-/*         t += *k; */
-/*     } */
-/*     return t; */
-/* } */
 
 unsigned int _get_index_by_key(Table *t, char *k) {
     unsigned int i = hash(k) % t->size;
-    mvprintw(0, 40, "%2d", i);
-    mvprintw(0, 48, "%2d", t->size);
     while(t->e[i] && t->e[i]->key && strcmp(t->e[i]->key, k)) {
         t->e[i]->col = true;
         i = COLLIDE(i,t->size);
     }
-    mvprintw(0, 44, "%2d", i);
     return i;
 }
 
