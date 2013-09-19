@@ -32,14 +32,14 @@ void hresize(unsigned int size, Table *t) {
 }
 
 unsigned int hash(const char *k) {
- unsigned int t = 0x1523; 
- for(; *k; ++k) { 
-     t ^= *k; 
-     t *= *k; 
-     t ^= *k; 
-     t += *k; 
- } 
- return t; 
+    unsigned int t = 0x1523; 
+    for(; *k; ++k) { 
+        t ^= *k; 
+        t *= *k; 
+        t ^= *k; 
+        t += *k; 
+    } 
+    return t; 
 } 
 
 unsigned int _get_index_by_key(Table *t, char *k) {
@@ -94,29 +94,6 @@ void hdel(Table *t, char *k) {
             }
         }
     }
-}
-
-void printKeys(Table *t) {
-    unsigned int s = t->size;
-    while(s--) {
-        if(t->e[s] && t->e[s]->key) {
-            printf("%s\n", t->e[s]->key);
-        }
-    }
-}
-
-void printArray(Table *t) {
-    unsigned int s = t->size;
-    while(s--) {
-        if(!t->e[s]) {
-            printf("%d: empty\n", s);
-        } else if(!t->e[s]->key) {
-            printf("%d: dummy\n", s);
-        } else {
-            printf("%d: %s, %s\n", s, t->e[s]->key, t->e[s]->val);
-        }
-    }
-    printf("\n");
 }
 
 Table *makeTable() {
