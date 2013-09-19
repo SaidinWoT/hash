@@ -22,4 +22,7 @@ void hset(Table *t, char *key, char *value);
 void hdel(Table *t, char *key);
 char *hget(Table *t, char *key);
 
+#ifdef TESTING
+unsigned int hash(const char *k);
+#endif /* !TESTING */
 #endif /* !__HASH */
