@@ -1,6 +1,8 @@
 #ifndef __HASH
 #define __HASH
 
+#include <stdbool.h>
+
 typedef struct _entry {
     char *key;
     char *val;
