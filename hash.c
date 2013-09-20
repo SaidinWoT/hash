@@ -4,7 +4,7 @@
 #include "hash.h"
 
 #define SIZE 8
-#define LOAD 0.65
+#define LOAD 0.45
 #define COLLIDE(i,s) (((5 * i) + 1) % s)
 
 void hset(Table *t, char *k, char *v);
@@ -24,8 +24,8 @@ void hresize(unsigned int size, Table *t) {
     t->size = size;
     t->entries = 0;
     t->e = calloc(size, sizeof(Entry *));
-    while(--s) {
-        if(e[s] && e[s]->key) {
+    while(s--) {
+        if(e[s]) {
             hset(t, e[s]->key, e[s]->val);
         }
     }
@@ -43,7 +43,7 @@ unsigned int hash(const char *k) {
 
 unsigned int _get_index_by_key(Table *t, char *k) {
     unsigned int i = hash(k) % t->size;
-    while(t->e[i] && t->e[i]->key && strcmp(t->e[i]->key, k)) {
+    while(t->e[i] && strcmp(t->e[i]->key, k)) {
         t->e[i]->col = true;
         i = COLLIDE(i,t->size);
     }
