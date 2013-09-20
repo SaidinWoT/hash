@@ -32,14 +32,13 @@ void hresize(unsigned int size, Table *t) {
 }
 
 unsigned int hash(const char *k) {
-    unsigned int t = 0x1523; 
+    // http://www.cse.yorku.ca/~oz/hash.html
+    unsigned int hash = 0;
     for(; *k; ++k) { 
-        t ^= *k; 
-        t *= *k; 
-        t ^= *k; 
-        t += *k; 
+        hash = (hash << 5 + hash) ^ *k; 
+        //hash(i) = hash(i-1) * 33 ^ str[i]
     } 
-    return t; 
+    return hash; 
 } 
 
 unsigned int _get_index_by_key(Table *t, char *k) {
