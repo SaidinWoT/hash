@@ -13,25 +13,27 @@ void assert(bool condition, const char* error_msg) {
 }
 
 
+
+
 bool test_hash_distribution() {
-    //no idea how to add a 'condition' for whether this test passes or fails
-    int bucket_count = 8;
+    int bucket_count = 16;
     int * buckets = calloc(bucket_count, sizeof(int));
-    char key [3];
-    key[2] = 0;
-    key[0] = 65;
+    char key [4];
+    key[3] = 0;
     int total=0;
-    unsigned char i;
-    unsigned char j;
-    for(j = 32; j <= 127 ; j ++)
-    for(i = 32; i <= 127 ; i ++){
-      key[0]=i;
-      key[1]=j;
+    unsigned int i;
+    for(i = 0; i <= 4096 ; i ++) {
+      key[0]=rand()%95+32;
+      key[1]=rand()%95+32;
+      key[2]=rand()%95+32;
       buckets[hash(key)%bucket_count]++;
-      total++;
     }
-    for(i = 0 ; i < bucket_count ; i++){
-      printf("%2i: %4i  (%10f%%)\n", i, buckets[i], buckets[i]*100.0/total);
+    for(i = 0 ; i < bucket_count ; i++) {
+      double error = buckets[i]-256;
+      error = error * 12 / (bucket_count * bucket_count - 1 );
+      error = error < 0? -error: error;
+      printf("%2i: %4i  (deviation: %10f)\n", i, buckets[i], error);
+      ASSERT(error < 2, "error above acceptable threshold (standard deviation >= 2)")
     }
     return true;
 }
