@@ -67,9 +67,29 @@ bool test_remove() {
     return true;
 }
 
+bool test_segfault_during_delete() {
+    Table * t = makeTable();
+    char * key1 = "0";
+    char * key2 = "8";
+
+    ASSERT( (hash(key1) % t->size) == (hash(key2) % t->size), "Keys will not collide. Update keys for this test.")
+
+    hset(t, key1, "asdf");
+    hset(t, key2, "asdf");
+
+    hdel(t, key2);
+    hdel(t, key1); // This segfaults
+
+    freeTable(t);
+
+    return true;
+}
+
+
 int main(int argc, char **argv) {
     test_hash_distribution();
     TEST(test_duplicate_insert_overrides);
     TEST(test_remove);
+    TEST(test_segfault_during_delete);
     printf("All tests passed!\n");
 }
