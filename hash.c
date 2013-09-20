@@ -27,8 +27,12 @@ void hresize(unsigned int size, Table *t) {
     while(s--) {
         if(e[s]) {
             hset(t, e[s]->key, e[s]->val);
+            free(e[s]->key);
+            free(e[s]->val);
+            free(e[s]);
         }
     }
+    free(e);
 }
 
 unsigned int hash(const char *k) {
