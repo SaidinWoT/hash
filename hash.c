@@ -76,8 +76,8 @@ void hset(Table *t, char *k, char *v) {
 
 void hdel(Table *t, char *k) {
     unsigned int i = _get_index_by_key(t, k);
-    Entry *e = t->e[i];
-    Entry *f = t->e[i];
+    Entry *e, *f;
+    e = f = t->e[i];
     char *key, *val;
     if(t->e[i] && !strcmp(t->e[i]->key, k)) {
         --t->entries;
@@ -87,6 +87,9 @@ void hdel(Table *t, char *k) {
         } else {
             while(e->col) {
                 i = COLLIDE(i,t->size);
+                if(!t->e[i]) {
+                    break;
+                }
                 e = t->e[i];
                 t->e[i] = NULL;
                 hset(t, e->key, e->val);
