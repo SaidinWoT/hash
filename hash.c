@@ -10,26 +10,26 @@
 void hset(Table *t, char *k, char *v);
 
 Table *halloc(unsigned int size) {
-    Table *t = malloc(sizeof(Table));
+    Table *t = calloc(1, sizeof(Table));
     t->size = size;
     t->load = LOAD;
-    t->entries = 0;
     t->e = calloc(size, sizeof(Entry *));
     return t;
 }
 
 void hresize(unsigned int size, Table *t) {
     Entry **e = t->e;
+    Entry *n;
     unsigned int s = t->size;
     t->size = size;
     t->entries = 0;
     t->e = calloc(size, sizeof(Entry *));
     while(s--) {
-        if(e[s]) {
-            hset(t, e[s]->key, e[s]->val);
-            free(e[s]->key);
-            free(e[s]->val);
-            free(e[s]);
+        if((n = e[s])) {
+            hset(t, n->key, n->val);
+            free(n->key);
+            free(n->val);
+            free(n);
         }
     }
     free(e);
@@ -67,13 +67,13 @@ void hset(Table *t, char *k, char *v) {
     };
     e = t->e[i];
     if(!e->key) {
-        e->key = calloc(BUFSIZ, sizeof(char));
+        e->key = calloc(strlen(k), sizeof(char));
         e->val = calloc(BUFSIZ, sizeof(char));
         strcpy(e->key, k);
         ++t->entries;
     }
     strcpy(e->val, v);
-    if(t->entries / (double)t->size > t->load) {
+    if(t->entries > t->size * t->load) {
         hresize(t->size * 2, t);
     }
 }
@@ -111,12 +111,14 @@ Table *makeTable() {
 }
 
 void freeTable(Table *t) {
-    while(t->size--) {
-        if(t->e[t->size]) {
-            free(t->e[t->size]->key);
-            free(t->e[t->size]->val);
+    unsigned int i = t->size;
+    Entry *e;
+    while(i--) {
+        if((e = t->e[i])) {
+            free(e->key);
+            free(e->val);
         }
-        free(t->e[t->size]);
+        free(e);
     }
     free(t->e);
     free(t);

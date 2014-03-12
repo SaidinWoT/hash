@@ -10,9 +10,9 @@ typedef struct _entry {
 } Entry;
 
 typedef struct _table {
-    unsigned int size, entries;
-    float load;
     Entry **e;
+    float load;
+    unsigned int size, entries;
 } Table;
 
 Table *makeTable();
