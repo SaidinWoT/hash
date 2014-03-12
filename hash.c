@@ -47,8 +47,9 @@ unsigned int hash(const char *k) {
 
 unsigned int _get_index_by_key(Table *t, char *k) {
     unsigned int i = hash(k) % t->size;
-    while(t->e[i] && strcmp(t->e[i]->key, k)) {
-        t->e[i]->col = true;
+    Entry *e;
+    while((e = t->e[i]) && strcmp(e->key, k)) {
+        e->col = true;
         i = COLLIDE(i,t->size);
     }
     return i;
@@ -83,10 +84,10 @@ void hdel(Table *t, char *k) {
     Entry *e, *f;
     e = f = t->e[i];
     char *key, *val;
-    if(t->e[i] && !strcmp(t->e[i]->key, k)) {
+    if(e && !strcmp(e->key, k)) {
         --t->entries;
         t->e[i] = NULL;
-        if(t->size > SIZE && t->entries / (double)(t->size / 2) < t->load) {
+        if(t->size > SIZE && (2 * t->entries < t->size * t->load)) {
             hresize(t->size / 2, t);
         } else {
             while(e->col) {
