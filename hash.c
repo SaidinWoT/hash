@@ -7,8 +7,6 @@
 #define LOAD 0.45
 #define COLLIDE(i,s) (((5 * i) + 1) % s)
 
-void hset(Table *t, char *k, char *v);
-
 Table *halloc(unsigned int size) {
     Table *t = calloc(1, sizeof(Table));
     t->size = size;
