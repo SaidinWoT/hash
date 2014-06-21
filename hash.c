@@ -55,7 +55,7 @@ unsigned int _get_index_by_key(Table *t, char *k) {
 
 void *hget(Table *t, char *k) {
     Entry *e = t->e[_get_index_by_key(t, k)];
-    return (e && e->val) ? e->val : NULL
+    return (e && e->val) ? e->val : NULL;
 }
 
 void hset(Table *t, char *k, void *v) {
