@@ -39,7 +39,7 @@ void display(Table *t) {
     for(i = 0; i < t->size / DISP; ++i) {
         for(j = 0; j < (DISP / t->size ? t->size : DISP); ++j) {
             key = (t->e[i*DISP+j]) ? t->e[i*DISP+j]->key : "E";
-            val = (t->e[i*DISP+j]) ? t->e[i*DISP+j]->val : "-";
+            val = (t->e[i*DISP+j]) ? (char *)t->e[i*DISP+j]->val : "-";
             col = (t->e[i*DISP+j]) ? (t->e[i*DISP+j]->col ? "t" : "f") : "";
             mvprintw(j*2+4, i*20, "%d", i*DISP+j);
             mvprintw(j*2+4, i*20+3, "%-15s", key);
